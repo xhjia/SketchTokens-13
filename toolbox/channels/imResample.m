@@ -40,7 +40,7 @@ if( nargin<3 || isempty(method) ), bilinear=1; else
   bilinear = ~strcmpi(method,'nearest');
 end
 if( nargin<4 || isempty(norm) ), norm=1; end
-[m,n,~]=size(A); k=numel(scale);
+[m,n,~]=size(A); k=numel(scale);%# of elements
 same = (k==1 && scale==1) | (k==2 && m==scale(1) && n==scale(2));
 if( same && norm==1 ); B=A; return; end
 

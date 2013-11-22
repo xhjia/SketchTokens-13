@@ -1,4 +1,4 @@
-function [M,O] = gradientMag( I, channel, normRad, normConst, full )
+function [M,O] = gradientMag( I, channel, normRad, normConst, full ) %collect in my library.
 % Compute gradient magnitude and orientation at each image location.
 %
 % If input image has k>1 channels and channel=0, keeps gradient with
@@ -47,8 +47,9 @@ if(nargin<3 || isempty(normRad)), normRad=0; end
 if(nargin<4 || isempty(normConst)), normConst=.005; end
 if(nargin<5 || isempty(full)), full=0; end
 
-if(nargout<=1), M=gradientMex('gradientMag',I,channel,full);
+if(nargout<=1), M=gradientMex('gradientMag',I,channel,full); %channel means select which channel. 0: all, others(e.g., 1 inex)
+    %full means when gradient( Megnitude, orientation) full !=0 for 360, full =0 like 180  
 else [M,O]=gradientMex('gradientMag',I,channel,full); end
 
-if( normRad==0 ), return; end; S = convTri( M, normRad );
-gradientMex('gradientMagNorm',M,S,normConst); % operates on M
+if( normRad==0 ), return; end; S = convTri( M, normRad ); % traingle filter like smooth
+gradientMex('gradientMagNorm',M,S,normConst); % operates on M % this is norm.

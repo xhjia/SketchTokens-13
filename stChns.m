@@ -33,7 +33,7 @@ function chns = stChns( I, opts )
         if ( opts.sigmas(i)==0 ),
             I1=I;
         else
-            f = fspecial('gaussian',opts.radius,opts.sigmas(i));
+            f = fspecial('gaussian',opts.radius,opts.sigmas(i));  %return filter
             I1 = imfilter(I,f);
         end
         if( opts.nOrients(i)>0 )
@@ -49,6 +49,6 @@ function chns = stChns( I, opts )
             chns{k}=M;
         end
     end
-    chns=cat(3,chns{1:k});
-    chns=convTri(chns,opts.chnsSmooth);
+    chns=cat(3,chns{1:k}); % first:index of dimension, cat lianjie
+    chns=convTri(chns,opts.chnsSmooth); % smooth
 end

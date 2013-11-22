@@ -16,7 +16,10 @@
 
 
 %% setup (follow instructions, only need to do once)
-cd(fileparts(mfilename('fullpath')))
+cd(fileparts(mfilename('fullpath'))) % path
+addpath(genpath(pwd))
+mex stDetectMex.cpp 'OPTIMFLAGS="$OPTIMFLAGS' '/openmp"'
+%mex imPadMex.cpp;
 if( 0 )
     % (1) Download Berkeley Segmentation Data Set and Benchmarks 500
     % http://www.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/
@@ -35,7 +38,7 @@ if( 0 )
     if( 1 )
         % can be trained in ~20m and requires ~3GB ram
         % BSDS500 performance: ODS=0.721 OIS=0.739 AP=0.768
-        opts=struct('nPos',100,'nNeg',80,'modelFnm','modelSmall','nTrees',20);
+        opts=struct('nPos',100,'nNeg',80,'modelFnm','modelSmall','nTrees',20);%struct('field', value{},..)
     else
         % takes ~2.5 hours to train and requires ~27GB ram
         % BSDS500 performance: ODS=0.727 OIS=0.746 AP=0.780
@@ -62,5 +65,9 @@ tic, E = stToEdges( st, 1 ); toc
 figure(1);
 im(I);
 figure(2);
-im(E);
+im(E>0.6);
+colormap jet;
+figure(3);
+Ec = edge(rgb2gray(I), 'canny', 0.3, 1.414);
+im(Ec);
 colormap jet;

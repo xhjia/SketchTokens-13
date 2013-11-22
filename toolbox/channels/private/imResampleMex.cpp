@@ -42,6 +42,9 @@ template<class T> void resampleCoef( int ha, int hb, int &n, int *&yas,
   }
 }
 
+
+
+
 // resample A using bilinear interpolation and and store result in B
 template<class T>
 void resample( T *A, T *B, int ha, int hb, int wa, int wb, int d, T r ) {
@@ -130,6 +133,9 @@ void resample( T *A, T *B, int ha, int hb, int wa, int wb, int d, T r ) {
   alFree(yas); alFree(ybs); alFree(ywts);
 }
 
+
+
+
 // B = imResampleMex(A,hb,wb,nrm); see imResample.m for usage details
 #ifdef MATLAB_MEX_FILE
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
@@ -156,7 +162,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   A=mxGetData(prhs[0]); B=mxGetData(plhs[0]);
   if( id==mxDOUBLE_CLASS ) {
     resample((double*)A, (double*)B, ns[0], ms[0], ns[1], ms[1], nCh, nrm);
-  } else if( id==mxSINGLE_CLASS ) {
+  } else if( id==mxSINGLE_CLASS ) {// mxreal
     resample((float*)A, (float*)B, ns[0], ms[0], ns[1], ms[1], nCh, float(nrm));
   } else if( id==mxUINT8_CLASS ) {
     float *A1 = (float*) mxMalloc(n*sizeof(float));

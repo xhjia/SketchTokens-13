@@ -1,13 +1,13 @@
-function J = convBox( I, r, s, nomex )
+function J = convBox( I, r, s, nomex ) % I dont know what to do 
 % Extremely fast 2D image convolution with a box filter.
 %
 % Convolves an image by a F=ones(2*r+1,2*r+1)/(2*r+1)^2 filter. The
 % convolution can be performed in constant time per-pixel, independent of
 % the radius r. In fact the implementation is nearly optimal, with the
 % convolution taking only slightly more time than creating a copy of the
-% input array. Boundary effects are handled as if the image were padded
-% symmetrically prior to performing the convolution. An optional integer
-% downsampling parameter "s" can be specified, in which case the output is
+% input array.
+%Boundary effects are handled as if the image were paddedvsymmetrically prior to performing the convolution.
+% An optional integer downsampling parameter "s" can be specified, in which case the output is
 % downsampled by s (the implementation is efficient with downsampling
 % occurring simultaneously with smoothing, saving additional time).
 %
@@ -66,7 +66,7 @@ if( nomex==0 )
   if( r==1 && s<=2 )
     J = convConst('convTri1',I,1,s);
   else
-    J = convConst('convBox',I,r,s);
+    J = convConst('convBox',I,r,s); % r =4 s =1 
   end
 else
   f = ones(1,2*r+1); f=f/sum(f);

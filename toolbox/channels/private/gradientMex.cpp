@@ -88,7 +88,7 @@ void gradMag( float *I, float *M, float *O, int h, int w, int d, bool full ) {
     memcpy( M+x*h, M2, h*sizeof(float) );
     // compute and store gradient orientation (O) via table lookup
     if( O!=0 ) for( y=0; y<h; y++ ) O[x*h+y] = acost[(int)Gx[y]];
-    if( O!=0 && full ) {
+    if( O!=0 && full ) {   /// full = 0, so not check
       y1=((~size_t(O+x*h)+1)&15)/4; y=0;
       for( ; y<y1; y++ ) O[y+x*h]+=(Gy[y]<0)*PI;
       for( ; y<h-4; y+=4 ) STRu( O[y+x*h],
@@ -327,7 +327,7 @@ mxArray* mxCreateMatrix3( int h, int w, int d, mxClassID id, bool c, void **I ){
   else mexErrMsgTxt("Unknown mxClassID.");
   *I = c ? mxCalloc(n,b) : mxMalloc(n*b);
   M = mxCreateNumericMatrix(0,0,id,mxREAL);
-  mxSetData(M,*I); mxSetDimensions(M,dims,3); return M;
+  mxSetData(M,*I); mxSetDimensions(M,dims,3); return M; // I guess 3 means #of dims 
 }
 
 // Check inputs and outputs to mex, retrieve first input I
@@ -337,7 +337,8 @@ void checkArgs( int nl, mxArray *pl[], int nr, const mxArray *pr[], int nl0,
   const int *dims; int nDims;
   if( nl<nl0 || nl>nl1 ) mexErrMsgTxt("Incorrect number of outputs.");
   if( nr<nr0 || nr>nr1 ) mexErrMsgTxt("Incorrect number of inputs.");
-  nDims = mxGetNumberOfDimensions(pr[0]); dims = mxGetDimensions(pr[0]);
+  nDims = mxGetNumberOfDimensions(pr[0]); //so I guess this should be pages.
+  dims = mxGetDimensions(pr[0]); // # of rows, # of colums, # of pages
   *h=dims[0]; *w=dims[1]; *d=(nDims==2) ? 1 : dims[2]; *I = mxGetPr(pr[0]);
   if( nDims!=2 && nDims!=3 ) mexErrMsgTxt("I must be a 2D or 3D array.");
   if( mxGetClassID(pr[0])!=id ) mexErrMsgTxt("I has incorrect type.");

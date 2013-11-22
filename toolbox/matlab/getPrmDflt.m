@@ -49,7 +49,7 @@ if iscell(prm)
   prmField = prm(1:2:end); prmVal = prm(2:2:end);
 else
   if(~isstruct(prm)), error('prm must be a struct or a cell'); end
-  prmVal = struct2cell(prm); prmField = fieldnames(prm);
+  prmVal = struct2cell(prm); prmField = fieldnames(prm);% how to strcut2cell
 end
 
 % get and update default values using quick for loop

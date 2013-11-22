@@ -1,4 +1,10 @@
 function [U,mu,vars] = pca( X )
+
+% read by xhjia anyway, assuming x is n by m matrix, then
+% then output: mu =[d1,...dm] mean value of X
+% U each column is a principal component,
+%vars      - sorted eigenvalues corresponding to eigenvectors in U
+%
 % Principal components analysis (alternative to princomp).
 %
 % A simple linear dimensionality reduction technique. Use to create an
@@ -28,7 +34,7 @@ function [U,mu,vars] = pca( X )
 %
 % INPUTS
 %  X         - [d1 x ... x dm x n], treated as n [d1 x ... x dm] elements
-%
+%                X----- n  by m elements xhjia
 % OUTPUTS
 %  U         - [d x r], d=prod(di), each column is a principal component
 %  mu        - [d1 x ... x dm] mean of X

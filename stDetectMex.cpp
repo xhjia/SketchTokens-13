@@ -3,7 +3,10 @@
 * Copyright 2013 Joseph Lim [lim@csail.mit.edu]
 * Please email me if you find bugs, or have suggestions or questions!
 * Licensed under the Simplified BSD License [see bsd.txt]
-*******************************************************************************/
+*******************************************************************************///
+//   S = stDetectMex( chns, chnsSs, model.thrs, model.fids, model.child, ...
+//      model.distr, cids1, cids2, stride, opts.radius, opts.nChnFtrs );
+
 #include "mex.h"
 #include <math.h>
 #include <omp.h>
@@ -18,21 +21,21 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
   float *thrs = (float*) mxGetData(prhs[2]);
   uint32 *fids = (uint32*) mxGetData(prhs[3]);
   uint32 *child = (uint32*) mxGetData(prhs[4]);
-  float *distr = (float*) mxGetData(prhs[5]);
+  float *distr = (float*) mxGetData(prhs[5]);//
   uint32 *cids1 =  (uint32*) mxGetData(prhs[6]);
   uint32 *cids2 =  (uint32*) mxGetData(prhs[7]);
-  const int stride = (int) mxGetScalar(prhs[8]);
-  const int rad = (int) mxGetScalar(prhs[9]);
-  const int nChnFtrs = (int) mxGetScalar(prhs[10]);
+  const int stride = (int) mxGetScalar(prhs[8]);// 2
+  const int rad = (int) mxGetScalar(prhs[9]);//17
+  const int nChnFtrs = (int) mxGetScalar(prhs[10]);//17150
 
   // get dimensions and constants
   const mwSize *chnsSize = mxGetDimensions(prhs[0]);
-  const int height = (int) chnsSize[0];
-  const int width = (int) chnsSize[1];
+  const int height = (int) chnsSize[0];//634
+  const int width = (int) chnsSize[1];//434
   const mwSize *distrSize = mxGetDimensions(prhs[5]);
-  const int nTokens = (int) distrSize[0];
-  const int nTreeNodes = (int) distrSize[1];
-  const int nTrees = (int) distrSize[2];
+  const int nTokens = (int) distrSize[0];//
+  const int nTreeNodes = (int) distrSize[1];//
+  const int nTrees = (int) distrSize[2];//
   const int heightOut = (int) ceil((height-rad*2.0)/stride);
   const int widthOut = (int) ceil((width-rad*2.0)/stride);
 

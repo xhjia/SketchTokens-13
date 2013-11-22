@@ -34,9 +34,9 @@ function S = stDetect( I, model, stride, rescale_back )
     opts=model.opts;
     %opts.inputColorChannel = 'luv';
     %opts.inputColorChannel = 'rgb';
-    I = imPad(I,opts.radius,'symmetric');
-    chns = stChns( I, opts );
-    [cids1,cids2] = computeCids(size(chns),opts);
+    I = imPad(I,opts.radius,'symmetric');  % dont know
+    chns = stChns( I, opts ); % get 14 pages of matrix?LUV,gaussian blur gradient (2), 2*4 graident histogram?
+    [cids1,cids2] = computeCids(size(chns),opts);%prepare for self-similarity feature
     if opts.nCells
         chnsSs = convBox(chns,opts.cellRad);
     else
@@ -52,7 +52,7 @@ function S = stDetect( I, model, stride, rescale_back )
     if ~rescale_back
         %keyboard;
     else    
-        S = imResample( S, stride );
+        S = imResample( S, stride ); % imResample back to origninal
         cr=size(S); cr=cr(1:2)-sizeOrig(1:2);
         if any(cr)
             S=S(1:end-cr(1),1:end-cr(2),:);
@@ -72,11 +72,11 @@ function [cids1,cids2] = computeCids( siz, opts )
     assert(siz(3)==nChns);
     
     nChnFtrs=s*s*nChns;
-    fids=uint32(0:nChnFtrs-1);
-    rs=mod(fids,s);
-    fids=(fids-rs)/s;
-    cs=mod(fids,s);
-    ch=(fids-cs)/s;
+    fids=uint32(0:nChnFtrs-1);  % pay attention
+    rs=mod(fids,s); % Modulus after division, one by one ?0?1?2?0?1?2?
+    fids=(fids-rs)/s;%(0,0,0,1,1,1,2,2,2,3,3,3....) page connect page
+    cs=mod(fids,s);%(0,0,0,1,1,1,2,2,2,0,0,0...) page repeat page
+    ch=(fids-cs)/s;%(0...,1....,...14..) 14pages, page no.
     cids = rs + cs*ht + ch*ht*wd;
     
     % construct cids1/cids2 lookup for self-similarity features
@@ -105,7 +105,7 @@ function [cids1,cids2] = computeCids( siz, opts )
         k=k+k1;
     end
     
-    ind1=ind1(ind+1);
+    ind1=ind1(ind+1);% expand (n dimension ind1) to (n*m dimension m=# of pages)
     rs1=mod(ind1,n);
     cs1=(ind1-rs1)/n;
     ind2=ind2(ind+1);
@@ -121,6 +121,6 @@ function [cids1,cids2] = computeCids( siz, opts )
     cids2 = rs2 + cs2*ht + ch*ht*wd;
     
     % combine cids for standard and self-similarity features
-    cids1=[cids cids1];
+    cids1=[cids cids1];% one patch [0- width, 0- widdth..]
     cids2=[zeros(1,nChnFtrs) cids2];
 end

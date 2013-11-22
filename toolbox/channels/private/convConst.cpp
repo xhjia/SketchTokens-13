@@ -26,7 +26,7 @@ void convBoxY( float *I, float *O, int h, int r, int s ) {
 
 // convolve I by a 2r+1 x 2r+1 ones filter (uses SSE)
 void convBox( float *I, float *O, int h, int w, int d, int r, int s ) {
-  float nrm = 1.0f/((2*r+1)*(2*r+1)); int i, j, k=(s-1)/2, h0, h1, w0;
+  float nrm = 1.0f/((2*r+1)*(2*r+1)); int i, j, k=(s-1)/2, h0, h1, w0; // s=1
   if(h%4==0) h0=h1=h; else { h0=h-(h%4); h1=h0+4; } w0=(w/s)*s;
   float *T=(float*) alMalloc(h1*sizeof(float),16);
   while(d-- > 0) {
@@ -34,7 +34,7 @@ void convBox( float *I, float *O, int h, int w, int d, int r, int s ) {
     memset( T, 0, h1*sizeof(float) );
     for(i=0; i<=r; i++) for(j=0; j<h0; j+=4) INC(T[j],LDu(I[j+i*h]));
     for(j=0; j<h0; j+=4) STR(T[j],MUL(nrm,SUB(MUL(2,LD(T[j])),LDu(I[j+r*h]))));
-    for(i=0; i<=r; i++) for(j=h0; j<h; j++ ) T[j]+=I[j+i*h];
+    for(i=0; i<=r; i++) for(j=h0; j<h; j++ ) T[j]+=I[j+i*h]; // assemble just perform like following 2 lines
     for(j=h0; j<h; j++ ) T[j]=nrm*(2*T[j]-I[j+r*h]);
     // prepare and convolve each column in turn
     k++; if(k==s) { k=0; convBoxY(T,O,h,r,s); O+=h/s; }
